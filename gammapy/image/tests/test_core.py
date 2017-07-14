@@ -7,7 +7,8 @@ from astropy.coordinates import SkyCoord, Angle
 from astropy.io import fits
 from astropy import units as u
 from astropy.units import Quantity
-from astropy.tests.helper import pytest, assert_quantity_allclose
+from astropy.tests.helper import assert_quantity_allclose
+import pytest
 from astropy.wcs import WcsError
 from regions import PixCoord, CirclePixelRegion, CircleSkyRegion
 from ...utils.testing import requires_dependency, requires_data
@@ -320,6 +321,14 @@ class TestSkyImage:
         center = self.image.center
         assert_allclose(center.l.deg, self.center.l.deg, atol=1e-5)
         assert_allclose(center.b.deg, self.center.b.deg, atol=1e-5)
+
+    def test_width(self):
+        width = self.image.width
+        assert_quantity_allclose(width, 2 * u.deg, rtol=1e-3)
+
+    def test_height(self):
+        height = self.image.height
+        assert_allclose(height, 1 * u.deg, rtol=1e-3)
 
     @requires_dependency('scipy')
     @pytest.mark.parametrize('kernel', ['gauss', 'box', 'disk'])
